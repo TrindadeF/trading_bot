@@ -43,8 +43,5 @@ class Bot:
                 self.parar()
 
     def parar(self):
-        """
-        Interrompe o robô.
-        """
         print("Parando o robô...")
         self.executando = False
