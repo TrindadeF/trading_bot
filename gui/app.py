@@ -42,7 +42,7 @@ class App:
 
         tk.Label(self.janela, text="Painel de Controle", font=("Arial", 20, "bold"), bg="#000000", fg="#00FF00").pack(pady=20)
 
-        saldo = self.api.obter_saldo()
+        saldo = self.api.obter_saldo()  
         tk.Label(self.janela, text=f"Saldo: {saldo:.2f}", font=("Arial", 14), bg="#000000", fg="#00FF00").pack(pady=10)
 
         tk.Button(self.janela, text="Iniciar Bot", font=("Arial", 12, "bold"), bg="#0d4d00", fg="#00FF00", command=self.iniciar_bot).pack(pady=10)
@@ -52,7 +52,7 @@ class App:
         usuario = self.usuario_entry.get()
         senha = self.senha_entry.get()
         try:
-            self.api = DruOptionAPI(api_key="api_key_aqui")
+            self.api = DruOptionAPI(api_key="api_key_aqui")  
             self.api.login(usuario, senha)
             messagebox.showinfo("Login", "Login realizado com sucesso!")
             self.criar_dashboard()
@@ -60,14 +60,21 @@ class App:
             messagebox.showerror("Erro de Login", f"Erro: {e}")
 
     def iniciar_bot(self):
-        estrategia = Estrategia()
-        self.bot = Bot(api=self.api, estrategia=estrategia)
-        self.bot.iniciar(paridade="EUR/USD")
+        if not self.bot:
+            estrategia = Estrategia()
+            self.bot = Bot(api=self.api, estrategia=estrategia)
+        if not self.bot.executando:  
+            self.bot.iniciar(paridade="EUR/USD")
+            messagebox.showinfo("Bot", "Bot iniciado com sucesso!")
+        else:
+            messagebox.showinfo("Bot", "Bot já está em execução.")
 
     def parar_bot(self):
-        if self.bot:
+        if self.bot and self.bot.executando:
             self.bot.executando = False
             messagebox.showinfo("Bot", "Bot parado com sucesso!")
+        else:
+            messagebox.showinfo("Bot", "Bot não está em execução.")
 
     def executar(self):
         self.janela.mainloop()

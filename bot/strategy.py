@@ -7,6 +7,7 @@ class Estrategia:
 
     def calcular_indicadores(self, precos):
         df = pd.DataFrame(precos, columns=["close"])
+
         df["RSI"] = ta.rsi(df["close"], length=14)
 
         bb = ta.bbands(df["close"], length=20, std=2)
